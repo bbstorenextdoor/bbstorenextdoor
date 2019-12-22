@@ -1,34 +1,41 @@
 // listen on port so now.sh likes it
-const { createServer } = require('http')
+const { createServer } = require('http');
 
-// bot features
-// due to the Twitter ToS automation of likes
-// is no longer allowed, so:
-const Twit = require('twit')
-const config = require('./config')
-const consoleLol = require('console.lol')
+const Twit = require('twit');
+const config = require('./config');
+const fs = require('fs');
 
-const bot = new Twit(config.twitterKeys)
+const bot = new Twit(config.twitterKeys);
 
-const retweet = require('./api/retweet')
-const reply = require('./api/reply')
+// const retweet = require('./api/retweet');
+// const reply = require('./api/reply');
 
-console.rofl('Bot starting...')
+console.rofl('Bot starting...');
 
-// retweet on keywords
-retweet()
-setInterval(retweet, config.twitterConfig.retweet)
+// setInterval(retweet, config.twitterConfig.retweet);
 
-// reply to new follower
-const userStream = bot.stream('user')
-userStream.on('follow', reply)
+var fileData = fs.readFileSync('./images/s1e1.png', { encoding: 'base64' });
+
+bot.post(
+  'media/upload',
+  { media_data: fileData },
+  function (err, data, response) {
+    var mediaIdStr = data.media_id_string;
+
+    const params = { status: 'Season 1 - Episode 1', media_ids: [mediaIdStr] };
+
+    bot.post('statuses/update', params, function (err, data, response) {
+      console.log(data);
+    });
+  }
+);
 
 // This will allow the bot to run on now.sh
 const server = createServer((req, res) => {
   res.writeHead(302, {
     Location: `https://twitter.com/${config.twitterConfig.username}`
-  })
-  res.end()
-})
+  });
+  res.end();
+});
 
-server.listen(3000)
+server.listen(3000);
