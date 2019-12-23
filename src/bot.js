@@ -11,7 +11,7 @@ console.log('Bot starting...');
 
 // setInterval(retweet, config.twitterConfig.retweet);
 
-const fileData = fs.readFileSync('./images/s1e1.png', { encoding: 'base64' });
+const fileData = fs.readFileSync('./images/s4e2.png', { encoding: 'base64' });
 
 bot.post(
   'media/upload',
