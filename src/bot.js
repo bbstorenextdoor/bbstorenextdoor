@@ -1,17 +1,23 @@
-// listen on port so now.sh likes it
-const { createServer } = require('http');
-
 const Twit = require('twit');
 const config = require('./config');
 const fs = require('fs');
+const path = require('path');
 
 const bot = new Twit(config.twitterKeys);
 
 console.log('Bot starting...');
 
-// setInterval(retweet, config.twitterConfig.retweet);
+const files = fs.readdirSync('./images')
+      .map(file => {
+        return path.join('./images', file);
+      });
 
-const fileData = fs.readFileSync('./images/s4e2.png', { encoding: 'base64' });
+const filePath = files[Math.floor(Math.random() * files.length)];
+
+const regex = new RegExp('images/s([0-9]+)e([0-9]+).png');
+const matches = filePath.match(regex);
+
+const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
 
 bot.post(
   'media/upload',
@@ -19,20 +25,13 @@ bot.post(
   function (err, data, response) {
     bot.post(
       'statuses/update',
-      { status: 'Season 1 - Episode 1', media_ids: [data.media_id_string] },
+      {
+        status: `Season ${matches[1]} - Episode ${matches[2]}`,
+        media_ids: [data.media_id_string]
+      },
       function (err, data, response) {
         console.log(data);
       }
     );
   }
 );
-
-// This will allow the bot to run on now.sh
-const server = createServer((req, res) => {
-  res.writeHead(302, {
-    Location: `https://twitter.com/${config.twitterConfig.username}`
-  });
-  res.end();
-});
-
-server.listen(3000);
