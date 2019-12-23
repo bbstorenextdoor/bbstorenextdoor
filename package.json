@@ -4,26 +4,11 @@
   "description": "A bootstrap for a twitter bot!",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "deploy": "now -E",
-    "contrib": "contributor",
-    "format": "pretty-quick",
-    "precommit": "pretty-quick --staged"
-  },
-  "pre-commit": [
-    "format"
-  ],
-  "devDependencies": {
-    "contributor": "0.1.25",
-    "prettier": "1.15.1",
-    "pretty-quick": "1.8.0"
+    "run": "node bot.js"
   },
   "dependencies": {
     "dotenv": "6.1.0",
     "twit": "^2.2.11"
-  },
-  "now": {
-    "alias": "twitter-bot-bootstrap"
   },
   "repository": {
     "type": "git",

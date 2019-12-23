@@ -11,19 +11,19 @@ console.log('Bot starting...');
 
 // setInterval(retweet, config.twitterConfig.retweet);
 
-var fileData = fs.readFileSync('./images/s1e1.png', { encoding: 'base64' });
+const fileData = fs.readFileSync('./images/s1e1.png', { encoding: 'base64' });
 
 bot.post(
   'media/upload',
   { media_data: fileData },
   function (err, data, response) {
-    var mediaIdStr = data.media_id_string;
-
-    const params = { status: 'Season 1 - Episode 1', media_ids: [mediaIdStr] };
-
-    bot.post('statuses/update', params, function (err, data, response) {
-      console.log(data);
-    });
+    bot.post(
+      'statuses/update',
+      { status: 'Season 1 - Episode 1', media_ids: [data.media_id_string] },
+      function (err, data, response) {
+        console.log(data);
+      }
+    );
   }
 );
 
